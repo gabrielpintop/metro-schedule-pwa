@@ -263,12 +263,14 @@ body {
   transition: transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s, -webkit-transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s;
 }
 
-.dialog>div {
+.dialog>div,
+.dialog label {
   padding-left: 24px;
   padding-right: 24px;
 }
 
 .dialog-title {
+  display: block;
   padding-top: 20px;
   font-size: 1.25em;
 }
