@@ -122,7 +122,7 @@ app.getSchedule = function (key, label, save) {
                 result.created = response._metadata.date;
                 result.schedules = response.result.schedules;
                 if (label && save) {
-                    db.set(key, label).then(function (res) { console.log('The station was saved') }).catch(function (err) { console.warn('failure: ', reason.message); console.warn(reason.stack); });
+                    db.set(key, label).then(function (res) { console.log('The station was saved') }).catch(function (reason) { console.warn('failure: ', reason.message); console.warn(reason.stack); });
                 }
                 app.updateTimetableCard(result);
             } else {
