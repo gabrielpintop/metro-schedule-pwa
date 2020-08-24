@@ -8,7 +8,8 @@ var app = {
     spinner: document.querySelector('.loader'),
     cardTemplate: document.querySelector('.cardTemplate'),
     container: document.querySelector('.main'),
-    addDialog: document.querySelector('.dialog-container')
+    addDialog: document.querySelector('.dialog-container'),
+    canSave: true
 };
 
 /*****************************************************************************
@@ -35,7 +36,7 @@ document.getElementById('butAddCity').addEventListener('click', function () {
     if (!app.selectedTimetables) {
         app.selectedTimetables = [];
     }
-    app.getSchedule(key, label, true);
+    app.getSchedule(key, label, app.canSave);
     app.selectedTimetables.push({ key: key, label: label });
     app.toggleAddDialog(false);
 });
@@ -121,9 +122,11 @@ app.getSchedule = function (key, label, save) {
                 result.created = response._metadata.date;
                 result.schedules = response.result.schedules;
                 if (label && save) {
-                    db.set(key, label).then(function (res) { console.log('Estación almacenada') }).catch(function (err) { console.warn('failure: ', reason.message); console.warn(reason.stack); });
+                    db.set(key, label).then(function (res) { console.log('The station was saved') }).catch(function (err) { console.warn('failure: ', reason.message); console.warn(reason.stack); });
                 }
                 app.updateTimetableCard(result);
+            } else {
+                app.updateTimetableCard(initialStationTimetable);
             }
         }
     };
@@ -184,10 +187,7 @@ var initialStationTimetable = {
 
 app.initialize = function () {
     simpleDB.open('saved-stations').then(function (result) {
-        console.log('opened: ' + result.name);
         db = result;
-        console.log(result);
-
         db.get('metros/1/bastille/A').then(function (res) {
             if (!res) {
                 app.getSchedule('metros/1/bastille/A', 'Bastille, Direction La Défense', true);
@@ -208,7 +208,8 @@ app.initialize = function () {
             console.log(err);
         });
     }).catch(function (reason) {
-        window.alert('No podemos almacenar tus preferencias de estaciones');
+        app.canSave = false;
+        app.getSchedule('metros/1/bastille/A', 'Bastille, Direction La Défense');
         console.warn('failure: ', reason.message);
         console.warn(reason.stack);
     });
