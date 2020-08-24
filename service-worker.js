@@ -12,7 +12,8 @@ const cacheFiles = [
     '/scripts/simpledb.min.js',
     '/styles/inline.css',
     '/images/ic_add_white_24px.svg',
-    '/images/ic_refresh_white_24px.svg'
+    '/images/ic_refresh_white_24px.svg',
+    '/images/install.svg'
 ];
 
 if (workbox) {
@@ -49,7 +50,7 @@ if (workbox) {
         self.skipWaiting();
     });
     self.addEventListener('activate', () => {
-        clients.claim();
+        self.clients.claim();
     });
 } else {
     console.log('No workbox');
